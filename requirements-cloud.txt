@@ -4,3 +4,6 @@ websockets
 google-generativeai
 pyyaml
 pysqlite3-binary
+groq
+langgraph
+pysqlcipher3

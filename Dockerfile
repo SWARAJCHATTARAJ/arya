@@ -3,6 +3,13 @@ FROM python:3.10-slim
 WORKDIR /app
 COPY requirements-cloud.txt .
 
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libsqlite3-dev \
+    libssl-dev \
+    sqlcipher \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN pip install --no-cache-dir -r requirements-cloud.txt
 
 COPY . .

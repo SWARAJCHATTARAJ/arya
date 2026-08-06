@@ -1,12 +1,19 @@
-import sqlite3
 import os
 
 DB_FILE = os.path.join(os.path.dirname(__file__), 'arya_local.db')
+ENCRYPTION_KEY = os.getenv("ARYA_DB_KEY", "default-secure-key-123")
+
+try:
+    from pysqlcipher3 import dbapi2 as sqlite3
+    USING_CIPHER = True
+except ImportError:
+    import sqlite3
+    USING_CIPHER = False
 
 def get_connection():
-    # To upgrade to SQLCipher later, this would use pysqlcipher3
-    # and execute: conn.execute(f"PRAGMA key='{encryption_key}'")
     conn = sqlite3.connect(DB_FILE)
+    if USING_CIPHER:
+        conn.execute(f"PRAGMA key='{ENCRYPTION_KEY}'")
     return conn
 
 def init_db():
