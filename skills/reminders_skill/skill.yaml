@@ -1,0 +1,10 @@
+name: reminders
+patterns:
+  - "remind me to"
+  - "set a reminder"
+  - "what are my reminders"
+description: "Save and read reminders."
+access:
+  network: false
+  filesystem: true
+  system: false

@@ -1,0 +1,14 @@
+# Arya Configuration
+offline_mode: false
+wake_word: "hey_jarvis"  # For custom wake word, replace with "Arya" and point to the model
+
+# Audio Settings
+audio:
+  sample_rate: 16000
+  channels: 1
+  silence_threshold: 500
+  silence_duration: 1.5
+
+# Security Settings
+security:
+  require_confirmation: true

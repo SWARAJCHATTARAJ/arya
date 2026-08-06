@@ -1,0 +1,10 @@
+name: time
+patterns:
+  - "what time is it"
+  - "tell me the time"
+  - "current time"
+description: "Returns the current time."
+access:
+  network: false
+  filesystem: false
+  system: false

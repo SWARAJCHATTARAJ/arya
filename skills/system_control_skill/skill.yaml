@@ -1,0 +1,10 @@
+name: system_control
+patterns:
+  - "open notepad"
+  - "open calculator"
+  - "delete temp files"
+description: "Executes allowlisted system commands."
+access:
+  network: false
+  filesystem: true
+  system: true

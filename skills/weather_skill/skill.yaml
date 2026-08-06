@@ -1,0 +1,11 @@
+name: weather
+patterns:
+  - "what's the weather"
+  - "what is the weather"
+  - "weather today"
+  - "do i need an umbrella"
+description: "Returns the current weather using Open-Meteo."
+access:
+  network: true
+  filesystem: false
+  system: false

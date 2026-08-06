@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+websockets
+google-generativeai
+pyyaml
+pysqlite3-binary
