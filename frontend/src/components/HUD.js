@@ -61,14 +61,21 @@ export default function HUD() {
             addLog(`> ${data.transcript}`);
           }
         } else if (data.type === 'response' && isCloudMode) {
-          // Speak the response in cloud mode with a heavier voice
+          // Speak the response in cloud mode with a deep male voice
           const utterance = new SpeechSynthesisUtterance(data.text);
-          utterance.pitch = 0.6; // Lower pitch for a heavier/deeper voice
-          utterance.rate = 0.9;  // Slightly slower for dramatic effect
+          utterance.pitch = 0.4; // Extremely low pitch for a deep voice
+          utterance.rate = 0.85; // Slower cadence
           
-          // Try to select a male/UK voice if available on the device
+          // Try to select a male voice if available on the device
           const voices = window.speechSynthesis.getVoices();
-          const maleVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('daniel')));
+          const maleVoice = voices.find(v => 
+            v.lang.startsWith('en') && 
+            (v.name.toLowerCase().includes('male') || 
+             v.name.toLowerCase().includes('daniel') || 
+             v.name.toLowerCase().includes('guy') ||
+             v.name.toLowerCase().includes('david') ||
+             v.name.toLowerCase().includes('mark'))
+          );
           if (maleVoice) {
              utterance.voice = maleVoice;
           }
