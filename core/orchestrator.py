@@ -58,17 +58,21 @@ class Orchestrator:
                 if re.search(pattern.lower(), text_lower):
                     print(f"Matched skill: {skill['name']}")
                     try:
-                        return skill["handler"](text)
+                        response = skill["handler"](text)
+                        if isinstance(response, str):
+                            return {"text": response}
+                        return response
                     except Exception as e:
                         print(f"Skill error: {e}")
-                        return "Sorry, that skill encountered an error."
+                        return {"text": "Sorry, that skill encountered an error."}
                         
         # 2. Fallback to LLM
         print("No skill matched. Falling back to LLM...")
         if self.llm_provider:
-            return self.llm_provider.generate_response(text)
+            response = self.llm_provider.generate_response(text)
+            return {"text": response}
         else:
-            return "I don't know how to handle that yet, and my brain is disconnected."
+            return {"text": "I don't know how to handle that yet, and my brain is disconnected."}
 
 if __name__ == "__main__":
     # Test orchestrator

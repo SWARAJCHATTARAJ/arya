@@ -1,0 +1,6 @@
+name: MusicSkill
+description: Plays music via native OS handlers
+patterns:
+  - play music
+  - play song
+  - play

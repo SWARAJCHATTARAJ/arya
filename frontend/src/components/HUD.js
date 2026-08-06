@@ -81,6 +81,17 @@ export default function HUD() {
           }
           
           window.speechSynthesis.speak(utterance);
+          
+          // Execute Native Action Bridge if present
+          if (data.action) {
+              setTimeout(() => {
+                  if (data.action === 'call') {
+                      window.location.href = `tel:${data.payload}`;
+                  } else if (data.action === 'music') {
+                      window.location.href = `spotify:search:${encodeURIComponent(data.payload)}`;
+                  }
+              }, 500); // Wait 500ms for TTS to start before deep linking
+          }
         }
       } catch (e) {
         console.error("WS parsing error", e);

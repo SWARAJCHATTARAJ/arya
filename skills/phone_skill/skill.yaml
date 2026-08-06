@@ -1,0 +1,6 @@
+name: PhoneSkill
+description: Makes phone calls
+patterns:
+  - call
+  - dial
+  - phone
