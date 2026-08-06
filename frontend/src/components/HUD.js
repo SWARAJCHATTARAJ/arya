@@ -61,8 +61,18 @@ export default function HUD() {
             addLog(`> ${data.transcript}`);
           }
         } else if (data.type === 'response' && isCloudMode) {
-          // Speak the response in cloud mode
+          // Speak the response in cloud mode with a heavier voice
           const utterance = new SpeechSynthesisUtterance(data.text);
+          utterance.pitch = 0.6; // Lower pitch for a heavier/deeper voice
+          utterance.rate = 0.9;  // Slightly slower for dramatic effect
+          
+          // Try to select a male/UK voice if available on the device
+          const voices = window.speechSynthesis.getVoices();
+          const maleVoice = voices.find(v => v.lang.startsWith('en') && (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('daniel')));
+          if (maleVoice) {
+             utterance.voice = maleVoice;
+          }
+          
           window.speechSynthesis.speak(utterance);
         }
       } catch (e) {
