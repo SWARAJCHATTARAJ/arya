@@ -4,67 +4,73 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mic, MicOff, Wifi, WifiOff, Activity } from 'lucide-react';
 
-const HelmetSVG = ({ state }) => {
+const CoreSVG = ({ state }) => {
   const isListening = state === 'listening';
   const isProcessing = state === 'processing';
   const isSpeaking = state === 'speaking';
   
   return (
     <div className="relative w-80 h-80 flex items-center justify-center drop-shadow-[0_0_25px_rgba(79,240,255,0.6)]">
+      {/* Central Glowing Core */}
+      <motion.div 
+        className="absolute w-32 h-32 rounded-full bg-[radial-gradient(circle,rgba(79,240,255,0.9)_0%,transparent_70%)]"
+        animate={{
+          scale: isSpeaking ? [1, 1.25, 1] : isProcessing ? [1, 1.1, 1] : 1,
+          opacity: isListening ? 1 : 0.6
+        }}
+        transition={{ repeat: Infinity, duration: isSpeaking ? 0.2 : 1, ease: "easeInOut" }}
+      />
+      
+      {/* Particle Dot Field */}
+      <motion.div 
+        className="absolute w-40 h-40 rounded-full border border-cyan-400/30 mix-blend-screen overflow-hidden"
+        style={{
+          backgroundImage: 'radial-gradient(rgba(79,240,255,0.6) 2px, transparent 2px)',
+          backgroundSize: '12px 12px',
+          backgroundPosition: 'center'
+        }}
+        animate={{ rotate: isProcessing ? 90 : 0 }}
+        transition={{ duration: 2, ease: "easeInOut" }}
+      />
+      
       <svg viewBox="0 0 400 400" className="absolute w-full h-full">
-        {/* Main Head Outline */}
-        <motion.path 
-          d="M 120 50 L 280 50 L 330 120 L 330 220 L 270 340 L 200 370 L 130 340 L 70 220 L 70 120 Z"
-          fill="none" 
-          stroke="#4ff0ff" 
-          strokeWidth="2"
-          animate={{
-            opacity: isProcessing ? [0.4, 1, 0.4] : 1,
-            strokeWidth: isProcessing ? [2, 4, 2] : 2
-          }}
-          transition={{ repeat: Infinity, duration: isProcessing ? 0.3 : 2, ease: "easeInOut" }}
+        {/* Core Ring 1 (Inner segmented) */}
+        <motion.circle 
+          cx="200" cy="200" r="90" 
+          fill="none" stroke="#4ff0ff" strokeWidth="4" 
+          strokeDasharray="20 10 5 10" 
+          animate={{ rotate: 360 }} 
+          transition={{ repeat: Infinity, duration: 15, ease: "linear" }} 
+          style={{ transformOrigin: "200px 200px" }}
+        />
+        {/* Core Ring 2 (Middle thick arcs) */}
+        <motion.circle 
+          cx="200" cy="200" r="110" 
+          fill="none" stroke="#4ff0ff" strokeWidth="8" 
+          strokeDasharray="50 30" 
+          animate={{ rotate: -360 }} 
+          transition={{ repeat: Infinity, duration: 25, ease: "linear" }} 
+          style={{ transformOrigin: "200px 200px" }}
+        />
+        {/* Core Ring 3 (Outer fine dotted ring) */}
+        <motion.circle 
+          cx="200" cy="200" r="130" 
+          fill="none" stroke="#4ff0ff" strokeWidth="2" 
+          strokeDasharray="2 15" strokeLinecap="round"
+          animate={{ rotate: 360, opacity: isProcessing ? [0.4, 1, 0.4] : 0.8 }} 
+          transition={{ rotate: { repeat: Infinity, duration: 30, ease: "linear" }, opacity: { repeat: Infinity, duration: 1 } }} 
+          style={{ transformOrigin: "200px 200px" }}
         />
         
-        {/* Inner Facial Structure */}
-        <path d="M 150 50 L 150 100 L 250 100 L 250 50" fill="none" stroke="#4ff0ff" strokeWidth="1" opacity="0.5" />
-        <path d="M 100 150 L 170 200 L 170 250 L 120 300" fill="none" stroke="#4ff0ff" strokeWidth="1.5" opacity="0.6" />
-        <path d="M 300 150 L 230 200 L 230 250 L 280 300" fill="none" stroke="#4ff0ff" strokeWidth="1.5" opacity="0.6" />
-        
-        {/* Eyes */}
-        <motion.path 
-          d="M 110 160 L 170 170 L 170 190 L 120 180 Z" 
-          fill={isListening || isProcessing || isSpeaking ? "rgba(79,240,255,0.3)" : "none"}
-          stroke="#4ff0ff" strokeWidth="2" 
-          animate={{ opacity: state === 'idle' ? 0.5 : 1 }}
-        />
-        <motion.path 
-          d="M 290 160 L 230 170 L 230 190 L 280 180 Z" 
-          fill={isListening || isProcessing || isSpeaking ? "rgba(79,240,255,0.3)" : "none"}
-          stroke="#4ff0ff" strokeWidth="2" 
-          animate={{ opacity: state === 'idle' ? 0.5 : 1 }}
-        />
-        
-        {/* Jaw/Mouth Area */}
-        <motion.path 
-          d="M 160 280 L 240 280 L 220 320 L 180 320 Z"
-          fill="rgba(79,240,255,0.1)"
-          stroke="#4ff0ff" 
-          strokeWidth="2"
-          animate={isSpeaking ? { 
-            y: [0, 8, 0, 15, 0, 5, 0],
-            opacity: [0.5, 1, 0.5] 
-          } : { y: 0 }}
-          transition={{ repeat: Infinity, duration: 0.8 }}
-        />
-        
-        {/* Visor scanline effect */}
-        {isListening && (
-          <motion.line 
-            x1="80" y1="175" x2="320" y2="175"
-            stroke="#ffffff" strokeWidth="3" opacity="0.9"
-            style={{ filter: 'drop-shadow(0 0 8px #ffffff)' }}
-            animate={{ y: [-30, 40, -30] }}
-            transition={{ repeat: Infinity, duration: 1.2, ease: "linear" }}
+        {/* Activity Accelerator Ring */}
+        {(isProcessing || isSpeaking) && (
+          <motion.circle
+            cx="200" cy="200" r="145"
+            fill="none" stroke="#ffffff" strokeWidth="3"
+            strokeDasharray="100 800" strokeLinecap="round"
+            animate={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: isProcessing ? 1 : 0.4, ease: "linear" }}
+            style={{ transformOrigin: "200px 200px", filter: 'drop-shadow(0 0 5px #ffffff)' }}
           />
         )}
       </svg>
@@ -208,6 +214,7 @@ export default function HUD() {
     ws.onerror = () => {
       if (fallbackUrl) {
         addLog(`WARN: LOCAL_FAILED, OVERRIDE_CLOUD`);
+        // eslint-disable-next-line no-use-before-define
         initWebSocket(fallbackUrl);
       }
     };
@@ -221,6 +228,7 @@ export default function HUD() {
   }, [addLog, addTranscript, isCloudMode]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     addLog("SYS_BOOT_SEQ_INIT");
     const cloudUrl = process.env.NEXT_PUBLIC_BACKEND_WS_URL || process.env.NEXT_PUBLIC_WS_URL || 'wss://arya.swarajchattaraj.tech/ws';
     // Small delay for boot effect
@@ -260,9 +268,14 @@ export default function HUD() {
     return () => {
       if (wsRef.current) wsRef.current.close();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initWebSocket]);
 
   const handleTapToSpeak = () => {
+    // Unlock Speech Synthesis engine on mobile browsers
+    const unlock = new window.SpeechSynthesisUtterance('');
+    window.speechSynthesis.speak(unlock);
+    
     if (state === 'offline') return;
     if (recognitionRef.current) {
       setState('listening');
@@ -302,10 +315,10 @@ export default function HUD() {
           transition={{ duration: 1 }}
         />
         
-        {/* Center: Helmet and Rings */}
+        {/* Center: Core and Rings */}
         <div className="relative z-10 flex items-center justify-center">
           <ConcentricRings state={state} />
-          <HelmetSVG state={state} />
+          <CoreSVG state={state} />
         </div>
 
         {/* Top Strip */}

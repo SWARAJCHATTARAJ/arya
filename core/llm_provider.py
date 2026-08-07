@@ -23,7 +23,7 @@ class LLMProvider:
         elif self.gemini_api_key:
             print("Initializing Gemini API...")
             genai.configure(api_key=self.gemini_api_key)
-            self.model = genai.GenerativeModel('gemini-2.5-flash')
+            self.model = genai.GenerativeModel('gemini-1.5-flash')
             self.provider = "gemini"
         else:
             print("Warning: No API Keys found. Running in offline mode.")
@@ -62,7 +62,7 @@ class LLMProvider:
                 return response.text
         except Exception as e:
             print(f"LLM Error: {e}")
-            return "I'm having trouble connecting to my brain right now."
+            return f"I'm having trouble connecting to my brain right now. Error: {str(e)}"
 
 if __name__ == "__main__":
     llm = LLMProvider()
