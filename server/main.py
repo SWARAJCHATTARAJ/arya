@@ -43,27 +43,42 @@ def set_state(new_state, new_transcript=None):
     broadcast_state()
 
 def process_query_from_ws(text, websocket):
-    # Process text query received via WebSocket (Cloud mode)
-    set_state("processing", text)
-    response_data = orc.route_query(text)
-    
-    text_reply = response_data.get("text", "")
-    set_state("speaking", text_reply)
-    
-    # Send response back to WS for frontend TTS
-    payload = {
-        "type": "response",
-        "text": text_reply
-    }
-    
-    if "action" in response_data:
-        payload["action"] = response_data["action"]
-    if "payload" in response_data:
-        payload["payload"] = response_data["payload"]
+    try:
+        # Process text query received via WebSocket (Cloud mode)
+        set_state("processing", text)
+        response_data = orc.route_query(text)
         
-    asyncio.run_coroutine_threadsafe(websocket.send_text(json.dumps(payload)), loop)
-    
-    set_state("idle", "")
+        text_reply = response_data.get("text", "")
+        set_state("speaking", text_reply)
+        
+        # Send response back to WS for frontend TTS
+        payload = {
+            "type": "response",
+            "text": text_reply
+        }
+        
+        if "action" in response_data:
+            payload["action"] = response_data["action"]
+        if "payload" in response_data:
+            payload["payload"] = response_data["payload"]
+            
+        asyncio.run_coroutine_threadsafe(websocket.send_text(json.dumps(payload)), loop)
+        
+        # Keep the speaking animation active for the duration of the speech
+        import time
+        words = len(text_reply.split())
+        sleep_time = max(2.0, words / 2.5) # estimate ~2.5 words per second
+        time.sleep(sleep_time)
+        
+    except Exception as e:
+        print(f"Error in process_query_from_ws: {e}")
+        error_msg = "My cognitive core encountered an error."
+        set_state("speaking", error_msg)
+        asyncio.run_coroutine_threadsafe(websocket.send_text(json.dumps({"type": "response", "text": error_msg})), loop)
+        import time
+        time.sleep(3)
+    finally:
+        set_state("idle", "")
 
 @app.get("/health")
 def health_check():

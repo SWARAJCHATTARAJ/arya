@@ -6,7 +6,7 @@ from typing import Dict, Any, TypedDict
 
 try:
     from langgraph.graph import StateGraph, END
-    LANGGRAPH_AVAILABLE = True
+    LANGGRAPH_AVAILABLE = False # Disabled for cloud stability
 except ImportError:
     LANGGRAPH_AVAILABLE = False
 
