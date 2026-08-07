@@ -1,28 +1,30 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Share_Tech_Mono, Rajdhani } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const shareTechMono = Share_Tech_Mono({
+  weight: '400',
+  variable: "--font-share-tech-mono",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const rajdhani = Rajdhani({
+  weight: ['400', '500', '600', '700'],
+  variable: "--font-rajdhani",
   subsets: ["latin"],
 });
 
 export const metadata = {
-  title: "Arya Assistant",
-  description: "Personal Voice Assistant",
+  title: "Arya JARVIS HUD",
+  description: "Personal Voice Assistant HUD",
   manifest: "/manifest.json",
-  themeColor: "#000000",
+  themeColor: "#050708",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${shareTechMono.variable} ${rajdhani.variable} h-full antialiased bg-[#050708]`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

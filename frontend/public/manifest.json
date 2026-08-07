@@ -1,5 +1,5 @@
 {
-  "name": "Arya Assistant",
+  "name": "Arya",
   "short_name": "Arya",
   "icons": [
     {
@@ -13,8 +13,8 @@
       "type": "image/png"
     }
   ],
-  "theme_color": "#000000",
-  "background_color": "#000000",
+  "theme_color": "#4ff0ff",
+  "background_color": "#050708",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait"

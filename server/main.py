@@ -3,7 +3,7 @@ import sys
 import asyncio
 import threading
 import json
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Response
 
 # Ensure core and skills are in path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -64,6 +64,10 @@ def process_query_from_ws(text, websocket):
     asyncio.run_coroutine_threadsafe(websocket.send_text(json.dumps(payload)), loop)
     
     set_state("idle", "")
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):

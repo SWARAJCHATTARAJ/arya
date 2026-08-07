@@ -65,9 +65,13 @@ Follow these steps to deploy Arya as your "Always-on brain" with Zero-Ops.
 3. Connect your GitHub repository.
 4. Render will automatically detect the `render.yaml` file and deploy the backend.
 5. In the Render Dashboard, go to your new `arya-backend` Web Service, navigate to **Environment**, and add:
-   `GEMINI_API_KEY`: `your_actual_gemini_api_key`
+   - `GEMINI_API_KEY`: `your_actual_gemini_api_key`
+   - `ADMIN_PASSWORD`: `your_secure_password`
 6. Copy the public URL Render gives you (e.g., `https://arya-backend-xyz.onrender.com`).
    *Note: Change `https` to `wss` when copying the URL for the next step.*
+
+> [!NOTE]
+> **Cold Start Behavior**: Render's free web service tier spins down after ~15 minutes of inactivity. When you send your next request (or open the app), it will take ~30-50 seconds to wake up. This is expected behavior and not a bug!
 
 ### Step C: Deploy Frontend to Vercel (Free Tier)
 1. Go to [Vercel](https://vercel.com) and sign in with GitHub.
@@ -75,7 +79,7 @@ Follow these steps to deploy Arya as your "Always-on brain" with Zero-Ops.
 3. Import your GitHub repository.
 4. Set the **Root Directory** to `frontend`.
 5. In the **Environment Variables** section, add:
-   `NEXT_PUBLIC_WS_URL`: `wss://arya-backend-xyz.onrender.com/ws` (use the URL from Step B).
+   - `NEXT_PUBLIC_BACKEND_WS_URL`: `wss://arya-backend-xyz.onrender.com/ws` (use the URL from Step B).
 6. Click **Deploy**.
 
 ### Step D: Custom Domain & Install the PWA
