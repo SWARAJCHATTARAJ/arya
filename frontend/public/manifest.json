@@ -1,6 +1,12 @@
 {
   "name": "Arya",
   "short_name": "Arya",
+  "description": "Arya AI HUD",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050708",
+  "theme_color": "#4ff0ff",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "/icon-192x192.png",
@@ -11,11 +17,12 @@
       "src": "/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
-  ],
-  "theme_color": "#4ff0ff",
-  "background_color": "#050708",
-  "start_url": "/",
-  "display": "standalone",
-  "orientation": "portrait"
+  ]
 }

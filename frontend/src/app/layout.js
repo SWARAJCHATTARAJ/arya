@@ -17,7 +17,15 @@ export const metadata = {
   title: "Arya JARVIS HUD",
   description: "Personal Voice Assistant HUD",
   manifest: "/manifest.json",
-  themeColor: "#050708",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Arya",
+  },
+};
+
+export const viewport = {
+  themeColor: "#4ff0ff",
 };
 
 export default function RootLayout({ children }) {

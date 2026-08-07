@@ -3,10 +3,27 @@ import time
 import sounddevice as sd
 import soundfile as sf
 
+import yaml
+
 class TTSPipeline:
-    def __init__(self, model_path="en_US-lessac-medium.onnx"):
-        print(f"Initializing Piper TTS (model: {model_path})...")
+    def __init__(self, model_path=None):
+        default_model = "models/en_US-ryan-high.onnx"
         self.model_path = model_path
+        
+        if not self.model_path:
+            try:
+                with open("settings.yaml", "r") as f:
+                    settings = yaml.safe_load(f)
+                    self.model_path = settings.get("tts", {}).get("model_path", default_model)
+            except Exception as e:
+                print(f"Warning: Could not read settings.yaml ({e}). Using default model.")
+                self.model_path = default_model
+                
+        # Ensure absolute path or relative to project root
+        if not os.path.isabs(self.model_path):
+            self.model_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), self.model_path)
+            
+        print(f"Initializing Piper TTS (model: {self.model_path})...")
         
         try:
             from piper import PiperVoice
