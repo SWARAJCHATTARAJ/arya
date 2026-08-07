@@ -11,17 +11,29 @@ class LLMProvider:
         self.offline_mode = offline_mode
         self.groq_api_key = os.environ.get("GROQ_API_KEY")
         self.gemini_api_key = os.environ.get("GEMINI_API_KEY")
+        self.opencode_zen_api_key = os.environ.get("OPENCODE_ZEN_API_KEY")
         self.provider = None
         
         if self.offline_mode:
             return
 
-        if self.groq_api_key and GROQ_AVAILABLE:
+        if self.opencode_zen_api_key:
+            try:
+                from openai import OpenAI
+                print("Initializing OpenCode Zen API (DeepSeek V4 Flash Free)...")
+                self.client = OpenAI(
+                    base_url="https://opencode.ai/zen/v1",
+                    api_key=self.opencode_zen_api_key
+                )
+                self.provider = "opencode-zen"
+            except ImportError:
+                print("Error: openai package not installed. Cannot use OpenCode Zen.")
+                self.offline_mode = True
+        elif self.groq_api_key and GROQ_AVAILABLE:
             print("Initializing Groq API...")
             self.client = Groq(api_key=self.groq_api_key)
             self.provider = "groq"
         elif self.gemini_api_key:
-            print("Initializing Gemini API...")
             genai.configure(api_key=self.gemini_api_key)
             self.model = genai.GenerativeModel('gemini-3.5-live-translate-preview')
             self.provider = "gemini"
@@ -60,6 +72,18 @@ class LLMProvider:
                     
                 response = self.model.generate_content(full_prompt)
                 return response.text
+                
+            elif self.provider == "opencode-zen":
+                messages = []
+                if system_instruction:
+                    messages.append({"role": "system", "content": system_instruction})
+                messages.append({"role": "user", "content": prompt})
+                
+                response = self.client.chat.completions.create(
+                    model="deepseek-v4-flash-free",
+                    messages=messages,
+                )
+                return response.choices[0].message.content
         except Exception as e:
             print(f"LLM Error: {e}")
             return f"I'm having trouble connecting to my brain right now. Error: {str(e)}"
