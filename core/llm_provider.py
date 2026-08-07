@@ -23,7 +23,7 @@ class LLMProvider:
         elif self.gemini_api_key:
             print("Initializing Gemini API...")
             genai.configure(api_key=self.gemini_api_key)
-            self.model = genai.GenerativeModel('gemini-1.5-flash')
+            self.model = genai.GenerativeModel('gemini-3.5-live-translate-preview')
             self.provider = "gemini"
         else:
             print("Warning: No API Keys found. Running in offline mode.")
